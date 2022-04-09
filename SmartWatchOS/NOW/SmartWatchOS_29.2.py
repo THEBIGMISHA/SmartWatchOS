@@ -1,10 +1,13 @@
-#SmartWatchOS 29.2
+#SmartWatchOS 30.0
 #TIME
-Day = 5
-Hours = 23
-Minutes = 25
+Day = 6
+Hours = 12
+Minutes = 40
 Seconds = 0
 #APP
+ThermometerT = 0
+CompassStill = 0
+CompassDATA = 0
 SecondsT = 0
 Wall = 0
 #SYSTEM
@@ -56,9 +59,81 @@ def Application():
         flash()
         Buttons_LOCK()
     if Wall == 5:
-        Watch_settings()
+        Compass()
     if Wall == 6:
+        Thermometer()
+    if Wall == 7:
+        Watch_settings()
+    if Wall == 8:
         SecondsTT()
+def Thermometer():
+    global ThermometerT
+    ThermometerT = input.temperature()
+    basic.show_leds("""
+    # . . . .
+    # . . . .
+    # # # # .
+    # . . . .
+    . # # # .
+    """)
+    if input.pin_is_pressed(TouchPin.P2):
+        music.ring_tone(Note.C5)
+        pause(70)
+        music.stop_all_sounds()
+        basic.show_number(ThermometerT)
+        pause(200)
+def Compass():
+    global CompassDATA
+    global CompassStill
+    CompassDATA = input.compass_heading()
+    if input.pin_is_pressed(TouchPin.P1):
+        global CompassStill
+        CompassStill += -1
+        music.ring_tone(Note.C5)
+        pause(70)
+        music.stop_all_sounds()
+    elif input.pin_is_pressed(TouchPin.P2):
+        global CompassStill
+        CompassStill += +1
+        music.ring_tone(Note.C5)
+        pause(70)
+        music.stop_all_sounds()
+    if CompassStill == 0:
+        CompassStandart()
+    elif CompassStill == 1:
+        CompassLetters()
+    elif CompassStill == 2:
+        CompassDegrees()
+def CompassDegrees():
+    basic.show_number(CompassDATA)
+def CompassLetters():
+    if CompassDATA < 22:
+        basic.show_string("N")
+    elif CompassDATA < 112:
+        basic.show_string("E")
+    elif CompassDATA < 202:
+        basic.show_string("S")
+    elif CompassDATA < 292:
+        basic.show_string("W")
+def CompassStandart():
+    Driver()
+    global CompassDATA
+    if CompassDATA < 22:
+        basic.show_arrow(ArrowNames.NORTH)
+    elif CompassDATA < 68:
+        basic.show_arrow(ArrowNames.NORTH_WEST)
+    elif CompassDATA < 112:
+        basic.show_arrow(ArrowNames.WEST)
+    elif CompassDATA < 157:
+        basic.show_arrow(ArrowNames.SOUTH_WEST)
+    elif CompassDATA < 202:
+        basic.show_arrow(ArrowNames.SOUTH)
+    elif CompassDATA < 247:
+        basic.show_arrow(ArrowNames.SOUTH_EAST)
+    elif CompassDATA < 292:
+        basic.show_arrow(ArrowNames.EAST)
+    elif CompassDATA < 337:
+        basic.show_arrow(ArrowNames.NORTH_EAST)    
 def Watch_settings():
     Watch()
     pause(200)
@@ -126,15 +201,6 @@ def SETVolume():
         . # . # .
         . . . . .
         """)
-    
-    if Volume <= -1:
-        global Volume 
-        Volume = 0
-        music.play_tone(Note.C5, 100)  
-    if Volume >= 257:
-        global Volume
-        Volume = 255 
-        music.play_tone(Note.C5,100)
     if input.pin_is_pressed(TouchPin.P1):
         global Volume
         Volume += -30
@@ -215,14 +281,6 @@ def SETBrightness():
         . . . . .
         # . . . .
         """)
-    if Brightness <= 10:
-        global Brightness 
-        Brightness = 30
-        music.play_tone(Note.C5, 100)  
-    if Brightness >= 256:
-        global Brightness
-        Brightness = 255 
-        music.play_tone(Note.C5,100)
     if input.pin_is_pressed(TouchPin.P1):
         global Brightness
         Brightness += -30
@@ -366,9 +424,12 @@ def Driver():
     music.stop_all_sounds()
 
 def Limiter():
-    if Wall >= 7:
+    global Wall
+    global Day
+    global CompassStill
+    if Wall >= 9:
         global Wall 
-        Wall = 6
+        Wall = 8
         music.ring_tone(Note.C5)
         pause(70)
         music.ring_tone(Note.A)
@@ -380,9 +441,48 @@ def Limiter():
     if Day == 8:
         global Day
         Day = 1
-    if Day == 0:
+    elif Day == 0:
         global Day
         Day = 7
+    if CompassStill == -1:
+        global CompassStill
+        CompassStill = 0
+        music.ring_tone(Note.C5)
+        pause(70)
+        music.ring_tone(Note.A)
+        pause(70)
+        music.ring_tone(Note.F)
+        pause(70)
+        music.stop_all_sounds()
+        pause(70)
+    elif CompassStill == 3:
+        global CompassStill
+        CompassStill = 2
+        music.ring_tone(Note.C5)
+        pause(70)
+        music.ring_tone(Note.A)
+        pause(70)
+        music.ring_tone(Note.F)
+        pause(70)
+        music.stop_all_sounds()
+        pause(70)
+    if Volume <= -1:
+        global Volume 
+        Volume = 0
+        music.play_tone(Note.C5, 100)  
+    if Volume >= 257:
+        global Volume
+        Volume = 255 
+        music.play_tone(Note.C5,100)
+    if Brightness <= 10:
+        global Brightness 
+        Brightness = 30
+        music.play_tone(Note.C5, 100)  
+    if Brightness >= 256:
+        global Brightness
+        Brightness = 255 
+        music.play_tone(Note.C5,100)
+
 def Buttons_LOCK():
     if input.pin_is_pressed(TouchPin.P1):
         music.ring_tone(Note.C5)
@@ -401,6 +501,10 @@ def Buttons_LOCK():
         pause(70)
         music.stop_all_sounds()
 def Buttons():
+    if input.is_gesture(Gesture.SHAKE):
+        global Wall
+        Wall = -1
+        pause(5000)
     if input.button_is_pressed(Button.B):
         global Wall
         Wall += +1
@@ -414,7 +518,7 @@ def Buttons():
         music.ring_tone(Note.C5)
         pause(100)
         music.stop_all_sounds()
-        pause(100)
+        pause(1000)
     if input.button_is_pressed(Button.A):
         global Wall
         Wall += -1
@@ -465,6 +569,7 @@ def Start():
     music.play_tone(Note.F,90)
     music.play_tone(Note.D,90)
     music.play_tone(Note.C5,90)
+    input.calibrate_compass()
 def Watch():
     global Hours
     global Minutes
