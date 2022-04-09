@@ -1,5 +1,5 @@
 *FOLDER NAME*
-[SmartWatchOS]-for micro:bit
+[OS]-OS for micro:bit
 [LTS]-Long term support
 [NOW]-The newest
 ---------------------------------------
