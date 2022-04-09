@@ -1,10 +1,11 @@
-#SmartWatchOS 30.0
+#SmartWatchOS 30.6
 #TIME
 Day = 6
-Hours = 12
-Minutes = 40
+Hours = 0
+Minutes = 26
 Seconds = 0
 #APP
+RadioFIND = 8
 ThermometerT = 0
 CompassStill = 0
 CompassDATA = 0
@@ -18,9 +19,11 @@ def OS():
     Limiter()
     Buttons()
     Application()
+    Find()
 basic.forever(OS)
 def TimeEngine():
-    global Day
+    def onIn_background():
+        global Day
     global Hours
     global Minutes
     global Seconds
@@ -42,29 +45,37 @@ def TimeEngine():
     global Seconds
     Seconds += +1
     pause(1000)
+    control.in_background(onIn_background)
 basic.forever(TimeEngine)
 def Application():
-    if Wall == -1:
-        DigitalWatch()
     if Wall == 0:
         Watch()
         Buttons_LOCK()
-    if Wall == 1:
+    elif Wall == -88:
+        global Wall
+        basic.clear_screen()
+        music.play_tone(Note.C5, 200)
+        basic.show_string("Find")
+        Wall = 0
+        pause(10000)
+    elif Wall == -1:
+        DigitalWatch()
+    elif Wall == 1:
         Calendar()
-    if Wall == 2:
+    elif Wall == 2:
         SETBrightness()
-    if Wall == 3:
+    elif Wall == 3:
         SETVolume()
-    if Wall == 4:
+    elif Wall == 4:
         flash()
         Buttons_LOCK()
-    if Wall == 5:
+    elif Wall == 5:
         Compass()
-    if Wall == 6:
+    elif Wall == 6:
         Thermometer()
-    if Wall == 7:
+    elif Wall == 7:
         Watch_settings()
-    if Wall == 8:
+    elif Wall == 8:
         SecondsTT()
 def Thermometer():
     global ThermometerT
@@ -82,6 +93,17 @@ def Thermometer():
         music.stop_all_sounds()
         basic.show_number(ThermometerT)
         pause(200)
+def Find():
+    global RadioFIND
+    global Wall
+    radio.set_transmit_power(1)
+    radio.set_frequency_band(0)
+    radio.send_number(RadioFIND)
+    def on_received_number(RadioFIND):
+        global Wall
+        wall = -88
+        pause(10000)
+    radio.on_received_number(on_received_number)
 def Compass():
     global CompassDATA
     global CompassStill
@@ -92,12 +114,14 @@ def Compass():
         music.ring_tone(Note.C5)
         pause(70)
         music.stop_all_sounds()
+        pause(100)
     elif input.pin_is_pressed(TouchPin.P2):
         global CompassStill
         CompassStill += +1
         music.ring_tone(Note.C5)
         pause(70)
         music.stop_all_sounds()
+        pause(100)
     if CompassStill == 0:
         CompassStandart()
     elif CompassStill == 1:
@@ -420,7 +444,8 @@ def DigitalWatch():
 def Driver():
     led.set_brightness(Brightness)
     music.set_volume(Volume)
-
+    radio.set_frequency_band(83)
+    radio.set_transmit_power(7)
     music.stop_all_sounds()
 
 def Limiter():
@@ -501,10 +526,6 @@ def Buttons_LOCK():
         pause(70)
         music.stop_all_sounds()
 def Buttons():
-    if input.is_gesture(Gesture.SHAKE):
-        global Wall
-        Wall = -1
-        pause(5000)
     if input.button_is_pressed(Button.B):
         global Wall
         Wall += +1
