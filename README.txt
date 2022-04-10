@@ -1,4 +1,4 @@
-*FOLDER NAME*
+**FOLDER NAME**
 [OS]-OS for micro:bit
 [LTS]-Long term support
 [NOW]-The newest
