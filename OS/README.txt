@@ -8,27 +8,6 @@
 █▀ █▀▄▀█ ▄▀█ █▀█ ▀█▀ █░█░█ ▄▀█ ▀█▀ █▀▀ █░█ █▀█ █▀
 ▄█ █░▀░█ █▀█ █▀▄ ░█░ ▀▄▀▄▀ █▀█ ░█░ █▄▄ █▀█ █▄█ ▄█
 #################################################
-----------------------INFO-----------------------
-This OS is made for: Micro:bit.
-This OS has:
-•Clock
-•Calendar
-•Settings:
-    Sound,
-    Brightness,
-    Clock
-•Thermometer
-•Compass (3 styles)
-•Stopwatch
-AND MORE
-----------------Hope you like OS----------------
-################################################
---------------------FOLDER NAME-----------------
-[OS]-OS for micro:bit
-###############################################
-----------------IN A PROGRAMME-----------------
-[#TEST]-comments
-[Day = a]-Day of the week (1-7)
-[Hours = a]-Hours RTS (0-23)
-[Minutes = a]-Hours RTS (0-59)
-[Wall = a]-Screen when turned on (0-5)
+-------------------FOLDER-NAME-------------------
+[CODE]-uncompiled code
+[HEX]-compiled program for micro bit
