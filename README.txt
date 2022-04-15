@@ -9,7 +9,7 @@
 ▄█ █░▀░█ █▀█ █▀▄ ░█░ ▀▄▀▄▀ █▀█ ░█░ █▄▄ █▀█ █▄█ ▄█
 #################################################
 ----------------------INFO-----------------------
-This OS is made for: Micro:bit & Micro:bit V2.
+This OS is made for: Micro:bit.
 This OS has:
 •Clock
 •Calendar
