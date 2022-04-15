@@ -1,4 +1,4 @@
-#SmartWatchOS 41.0
+#SmartWatchOS 40.8
 #TIME
 Day = 1
 Hours = 12
@@ -26,18 +26,29 @@ def OS():
 basic.forever(OS)
 def TimeEngine():
     def onIn_background():
-        def on_minute_changed():
-            global Minutes
-            Minutes += +1
-        timeanddate.on_minute_changed(on_minute_changed)
-        def on_hour_changed():
-            global Hours
-            Hours += +1
-        timeanddate.on_hour_changed(on_hour_changed)
-        def on_day_changed():
-            global Day
-            Day += +1
-        timeanddate.on_day_changed(on_day_changed)
+        global Day
+    global Hours
+    global Minutes
+    global Seconds
+    if Seconds >= 60:
+        global Seconds
+        global Minutes
+        Seconds += -60
+        Minutes += +1
+        AODON()
+    if Minutes >= 60:
+        global Minutes
+        global Hours
+        Minutes = 2
+        Hours += +1
+    if Hours >= 24:
+        global Hours
+        global Day
+        Day += +1
+        Hours = 0
+    global Seconds
+    Seconds += +1
+    pause(1000)
     control.in_background(onIn_background)
 basic.forever(TimeEngine)
 def Application():
@@ -542,19 +553,7 @@ def Limiter():
         global Brightness
         Brightness = 255
         music.play_tone(Note.C5,100)
-        global Day
-    global Hours
-    global Minutes
-    if Minutes >= 60:
-        global Minutes
-        global Hours
-        Minutes = 2
-        Hours += +1
-    if Hours >= 24:
-        global Hours
-        global Day
-        Day += +1
-        Hours = 0
+
 def Buttons_LOCK():
     if input.pin_is_pressed(TouchPin.P1):
         music.ring_tone(Note.C5)
@@ -597,7 +596,6 @@ def Buttons():
 def Start():
     AODON()
     Driver()
-    timeanddate.set24_hour_time(Hours,Minutes,Seconds)
     basic.show_leds("""
     . . . . .
     . . . . .
