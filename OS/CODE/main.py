@@ -1,4 +1,4 @@
-#SmartWatchOS 40.8
+#SmartWatchOS 41.1
 #TIME
 Day = 1
 Hours = 12
