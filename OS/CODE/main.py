@@ -641,7 +641,7 @@ def Start():
 def Watch():
     global Hours
     global Minutes
-    global Brightness
+    global AODDATA
     basic.clear_screen()
     led.plot(2, 2)
     led.set_brightness(AODDATA)
