@@ -1,4 +1,4 @@
-#SmartWatchOS 41.1
+#SmartWatchOS 41.2
 #TIME
 Day = 1
 Hours = 12
@@ -46,6 +46,7 @@ def TimeEngine():
         global Day
         Day += +1
         Hours = 0
+        Minutes +=-1
     global Seconds
     Seconds += +1
     pause(1000)
@@ -641,7 +642,7 @@ def Start():
 def Watch():
     global Hours
     global Minutes
-    global AODDATA
+    global Brightness
     basic.clear_screen()
     led.plot(2, 2)
     led.set_brightness(AODDATA)
