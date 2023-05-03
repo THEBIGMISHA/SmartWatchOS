@@ -21,14 +21,3 @@ This OS has:
 •Compass (3 styles)
 •Stopwatch
 AND MORE
-----------------Hope you like OS----------------
-################################################
---------------------FOLDER NAME-----------------
-[OS]-OS for micro:bit
-###############################################
-----------------IN A PROGRAMME-----------------
-[#TEST]-comments
-[Day = a]-Day of the week (1-7)
-[Hours = a]-Hours RTS (0-23)
-[Minutes = a]-Hours RTS (0-59)
-[Wall = a]-Screen when turned on (0-5)
